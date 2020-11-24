@@ -1,8 +1,9 @@
 <?php
-namespace Lottery\Verify;
+namespace Loticket;
 
 use Psr\SimpleCache\CacheInterface;
 use Psr\Log\LoggerInterface;
+use Loticket\Verify\Playlot\PlayInterface;
 
 /********************************
 *彩票验证
@@ -80,7 +81,7 @@ class LotteryApp
     public function log(string $log, string $type = 'sql'): void
     {
        
-        return $this->log->log($type, $log);
+        $this->log->log($type, $log);
        
     }
 
@@ -105,14 +106,46 @@ class LotteryApp
 
         return $default;
     }
+   
+
+     /**
+     * 创建对象
+     * @access public
+     * @return LotteryApp
+     */
+    public static function create(): LotteryApp
+    {
+        return new static();
+    }
+
+
+    /**
+     * 创建对象实例
+     * @access protected
+     * @param string|null $name  连接标识
+     * @param bool        $force 强制重新连接
+     * @return PlayInterface
+     */
+    public function instance(string $name = null, bool $force = false): PlayInterface
+    {
+        if (empty($name)) {
+            $name = 'dlt';
+        }
+
+        if ($force || !isset($this->instance[$name])) {
+            $this->instance[$name] = $this->createInstance($name);
+        }
+
+        return $this->instance[$name];
+    }
 
 
     /**
      * 创建对象
      * @param $name
-     * @return ConnectionInterface
+     * @return PlayInterface
      */
-    protected function createInstance(string $name): ConnectionInterface
+    protected function createInstance(string $name): PlayInterface
     {
         $config = $this->getConfig($name);
 
@@ -121,19 +154,10 @@ class LotteryApp
         if (false !== strpos($type, '\\')) {
             $class = $type;
         } else {
-            $class = '\\Lottery\\Verify\\Playlot\\' . ucfirst($type);
+            $class = '\\Loticket\\Verify\\Playlot\\Play' . ucfirst($type);
         }
 
-        $instence = new $class($config);
-        $instence->setLottery($this);
-
-        if ($this->cache) {
-            $instence->setCache($this->cache);
-        }
-
-        if ($this->log) {
-            $instence->setLog($this->log);
-        }
+        $instence = new $class($this);
 
         return $instence;
     }

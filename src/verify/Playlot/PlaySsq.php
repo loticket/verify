@@ -2,10 +2,11 @@
 namespace Loticket\Verify\Playlot;
 use Loticket\LotteryApp;
 
+
 /**
- * 大乐透验证类
+ * 双色球验证类
  */
-class PlayDlt implements PlayInterface {
+class PlaySsq implements PlayInterface {
 
     
     private $app;

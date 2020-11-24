@@ -1,0 +1,23 @@
+{
+    "name": "loticker/verify",
+    "description": "彩票格式验证-拆票-计算注数",
+    "type": "library",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "liu chao",
+            "email": "429281869@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.3"
+    },
+
+    "autoload": {
+        "psr-4": {
+             "Loticket\\": "src/"
+        }
+
+    }
+}

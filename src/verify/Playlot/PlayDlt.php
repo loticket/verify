@@ -16,87 +16,13 @@ class PlayDlt extends BasePlay implements PlayInterface {
 
     protected $ticketNum = 0;
     
-
-
-    //验证格式是否正确
-    public function verification(): bool{
-    
-
-      //验证子玩法
-       if(!$this->checkPlaytype()){ 
-         throw new PlayException("子玩法验证不正确",1001);
-         return false;
-       }
-
-       //验证号码格式
-
-       if (!$this->playCheck()) { 
-          throw new PlayException("号码验证不正确",1001);
-          return false;
-       }
-
-       //验证注数和钱数
-
-       if ($this->ticketNum != $this->ticket['betnum']) {
-          throw new PlayException("注数计算错误",1001);
-          return false;
-       }
-
-
-
-       $money = $this->ticket['playtype'] == 2 ? ($this->ticketNum*3*$this->ticket['multiple']) : ($this->ticketNum*2*$this->ticket['multiple']);
-
-       
-       if($money != $this->ticket['money']){
-           throw new PlayException("钱数计算错误",1001);
-           return false;
-       }
-
-
-       return true;
-    }
-
-    
-
-    //获取计算出来的注数 
-    public function getTicketNum(): int {
-
-      return $this->ticketNum;
-      
-    }
-
-    //获取拆票后的数组
-    public function getSpliteTicket(): array {
-       $nowMultiple = intval($this->ticket['multiple']);
-
-       if ($nowMultiple < $this->maxmultiple[0]) {
-          return $this->ticket;
-       }
-
-       $times = ceil($nowMultiple / $this->maxmultiple[0]);
-       $newTicket = [];
-       $temp = $this->ticket;
-       for($i = 1;$i<=$times;$i++){
-          if($i*$this->maxmultiple[0] > $nowMultiple){
-            $temp['multiple'] =  $nowMultiple - ($i-1)*$this->maxmultiple[0];
-          }else{
-            $temp['multiple'] = $this->maxmultiple;
-          }
-
-          array_push($newTicket,$temp);
-
-       }
-       return $newTicket;
-    } 
-
-    
     
     /**
     *@action 验证号码格式是否正确
     *@param 
     *@return bool
     **/
-    protected function playCheck(): bool {
+    public function playCheck(): bool {
        if($this->ticket['lottype'] == 1 || $this->ticket['lottype'] == 2){
          return $this->normalPlayCheck();
        }else{

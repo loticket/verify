@@ -64,6 +64,86 @@ abstract class BasePlay
         $this->ticket = $ticket;
     }
 
+
+  
+    /*获取计算出来的注数
+    *
+    *parame void
+    *return int  
+    */
+    public function getTicketNum(): int {
+
+      return $this->ticketNum;
+      
+    }
+
+
+     //验证格式是否正确
+    public function verification(): bool{
+    
+
+      //验证子玩法
+       if(!$this->checkPlaytype()){ 
+         throw new PlayException("子玩法验证不正确",1001);
+         return false;
+       }
+
+       //验证号码格式
+
+       if (!$this->playCheck()) { 
+          throw new PlayException("号码验证不正确",1001);
+          return false;
+       }
+
+       //验证注数和钱数
+
+       if ($this->ticketNum != $this->ticket['betnum']) {
+          throw new PlayException("注数计算错误",1001);
+          return false;
+       }
+
+
+
+       $money = $this->ticket['playtype'] == 2 ? ($this->ticketNum*3*$this->ticket['multiple']) : ($this->ticketNum*2*$this->ticket['multiple']);
+
+       
+       if($money != $this->ticket['money']){
+           throw new PlayException("钱数计算错误",1001);
+           return false;
+       }
+
+
+       return true;
+    }
+
+
+    /*按照设定的最大的倍数拆票
+    *parame void
+    *return array  
+    */
+    public function getSpliteTicket(): array {
+       $nowMultiple = intval($this->ticket['multiple']);
+
+       if ($nowMultiple < $this->maxmultiple[0]) {
+          return $this->ticket;
+       }
+
+       $times = ceil($nowMultiple / $this->maxmultiple[0]);
+       $newTicket = [];
+       $temp = $this->ticket;
+       for($i = 1;$i<=$times;$i++){
+          if($i*$this->maxmultiple[0] > $nowMultiple){
+            $temp['multiple'] =  $nowMultiple - ($i-1)*$this->maxmultiple[0];
+          }else{
+            $temp['multiple'] = $this->maxmultiple;
+          }
+
+          array_push($newTicket,$temp);
+
+       }
+       return $newTicket;
+    } 
+
     /*检查子玩法
     *parame int $lottype 子玩法
     *return bool 

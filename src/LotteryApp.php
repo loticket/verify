@@ -1,22 +1,21 @@
 <?php
+declare (strict_types = 1);
+/********************************
+*彩票验证获取当前采种实例的类
+**********************************/
+
 namespace Loticket;
 
 use Psr\SimpleCache\CacheInterface;
 use Psr\Log\LoggerInterface;
 use Loticket\Verify\Playlot\PlayInterface;
 
-/********************************
-*彩票验证
-**********************************/
 
-/**
-*  
-*/
-class LotteryApp
+class LotteryApp extends Container
 {
 	
 	
-    protected $instence;
+    protected $instance;
     
     /**
      * 配置文件数组
@@ -35,6 +34,18 @@ class LotteryApp
      * @var LoggerInterface
      */
     protected $log;
+   
+   /**
+     * 对象工具列表
+     * @var object
+     */
+    public $bind = [
+       'combination' => 'Loticket\Verify\Utils\Combination',
+ 
+    ];
+
+
+   
 
 
     /**
@@ -43,9 +54,9 @@ class LotteryApp
      * @param array $config 连接配置
      * @return void
      */
-    public function setConfig(array $config): void
+    public function setConfig(): void
     {
-        $this->config = $config;
+        $this->config = require_once('Config.php');
     }
 
     /**
@@ -94,6 +105,11 @@ class LotteryApp
      */
     public function getConfig(string $name = '', array $default = []): array
     {
+        
+        if(count($this->config) == 0){
+              $this->setConfig();
+        }
+        
         if ('' === $name) {
             return $this->config;
         }
@@ -149,21 +165,21 @@ class LotteryApp
     {
         $config = $this->getConfig($name);
 
-        $type = !empty($config['type']) ? $config['type'] : 'dlt';
+        $type = !empty($name) ? $name : 'dlt';
 
         if (false !== strpos($type, '\\')) {
             $class = $type;
         } else {
             $class = '\\Loticket\\Verify\\Playlot\\Play' . ucfirst($type);
         }
-
-        $instence = new $class($this);
+        
+        $instence = new $class($this,$config);
 
         return $instence;
     }
-     
 
 
+   
 
 }
 

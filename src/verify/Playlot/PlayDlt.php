@@ -113,19 +113,19 @@ class PlayDlt extends BasePlay implements PlayInterface {
     **/
     protected function dantuoPlayCheck(): bool {
      
-      if(empty($this->$ticket['lotnum']) || is_null($this->$ticket['lotnum']) || !$this->$ticket['lotnum']){
+      if(empty($this->ticket['lotnum']) || is_null($this->ticket['lotnum']) || !$this->ticket['lotnum']){
          return false;
       }
 
-      if(strpos($this->$ticket['lotnum'], "-") === false){
+      if(strpos($this->ticket['lotnum'], "-") === false){
          return false;
       }
 
-      list($redball,$blueball) = explode("-", $info);
+      list($redball,$blueball) = explode("-", $this->ticket['lotnum']);
 
 
       //判断是否有胆码
-      if(substr_count($this->$ticket['lotnum'],'|',0) == 0){
+      if(substr_count($this->ticket['lotnum'],'|',0) == 0){
          return false;
       }
 
@@ -179,34 +179,26 @@ class PlayDlt extends BasePlay implements PlayInterface {
           return false;
       }
       
-      $redBallAll = [$rDanArr,$rTuoArr];
+      $this->redBallBet = [...$rDanArr,...$rTuoArr];
 
-      $blueBallAll = [$bDanArrNum,$bTuoArrNum];
+      $this->blueBallBet = [...$bDanArr,...$bTuoArr];
+      
 
       //检查红球
-
-      $this->redBallBet = $this->ballIsInset($redBallAll,$this->normal['red']);
-
-      $redNum = count($this->redBallBet);
-
-      if($redNum == 0){
+      $flag = $this->ballIsInset($this->redBallBet,$this->redBall);
+      if(!$flag){
           return false;
       }
 
       //检查篮球
       
-      $this->blueBallBet = $this->ballIsInset($blueBallAll,$this->normal['blue']);
-
-      $blueNum = count($this->blueBallBet);
-
-      if($blueNum == 0){
+      $flag = $this->ballIsInset($this->blueBallBet,$this->blueBall);
+      if(!$flag){
           return false;
       }
 
       //计算注数
-      
-    $this->ticketNum = $this->Combination($rTuoArrNum,($this->ballrange[0]-$rDanArrNum)) * $this->Combination($bTuoArrNum,($this->ballrange[1]-$bTuoArr));  
-      
+      $this->ticketNum = $this->Combination($rTuoArrNum,($this->ballrange[0]-$rDanArrNum)) * $this->Combination($bTuoArrNum,($this->ballrange[1]-$bDanArrNum));  
       return true;
     }
 

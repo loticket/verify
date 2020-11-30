@@ -4,7 +4,7 @@
 
 
 大乐透格式验证：
-
+<?php
 use Loticket\LotteryApp;
 use Loticket\Verify\Exception\PlayException;
 
@@ -27,3 +27,4 @@ try {
  } catch (PlayException $e){
     $ex = $e->ExecptionInfo();
 } 
+?>

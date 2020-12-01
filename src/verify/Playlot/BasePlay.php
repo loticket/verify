@@ -194,7 +194,7 @@ abstract class BasePlay
            return [];
         }
          
-        return $ballArrs;
+        return sort($ballArrs);
     }
 
 

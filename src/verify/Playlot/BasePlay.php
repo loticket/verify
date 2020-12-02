@@ -12,11 +12,13 @@ use Loticket\Verify\Utils\Combination;
 abstract class BasePlay
 {   
 
-	protected $app;
+	protected LotteryApp $app;
 
-    protected $ticket; //票内容
+  protected array $ticket; //票内容
 
-    protected $config;
+  protected array $config;
+
+  protected array $ticketArr = [];
 	
 	public function __construct(LotteryApp $app,array $config){
        
@@ -113,6 +115,8 @@ abstract class BasePlay
        }
 
 
+
+
        return true;
     }
 
@@ -191,17 +195,22 @@ abstract class BasePlay
     public function checkBalls(string $ballArr,array $ballRange,array $ballAll): array {
         $ballArrs = explode(',', $ballArr);
 
-        if(!$this->ballIsInset($ballArrs,$ballAll)) {
-          return [];
-        }
         $ballNum = count($ballArrs);
-        if ($ballNum < $ballRange[0] || $ballNum > $ballRange[1]) {
-           return [];
-        }
 
         if ($ballNum == 1) {
             return $ballArrs;
         }
+
+        if ($ballNum < $ballRange[0] || $ballNum > $ballRange[1]) {
+           return [];
+        }
+
+        if(!$this->ballIsInset($ballArrs,$ballAll)) {
+          return [];
+        }
+        
+
+        
 
         sort($ballArrs);
 

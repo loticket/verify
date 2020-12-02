@@ -18,7 +18,7 @@ class PlayQxc extends BasePlay implements PlayInterface {
     }
 
     /**
-    *@action 单式 0,3,0,0,3,9,2-10 复式 4 9,4 9,4 9,4 9,4 9,4 9,4 9-3,4
+    *@action 单式 0,3,0,0,3,9,2-10 复式 4;3;3,5;3,7;4;6-4,6,14
     *@前驱 【7, 30】
     *@return bool
     */

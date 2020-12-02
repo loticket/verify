@@ -71,6 +71,7 @@ class PlayPls extends BasePlay implements PlayInterface {
    if(!$this->ballIsInset($ballsArr,$this->redBall)){
       return false;
    }
+   $this->ticketNum = 1;
    
    return true;
  }
@@ -91,7 +92,7 @@ class PlayPls extends BasePlay implements PlayInterface {
     if($betZhu == 0){
       return false;
     }
-    $this->betZhu = $betZhu;
+    $this->ticketNum = $betZhu;
     unset($betZhu);
    return true;
 
@@ -131,8 +132,13 @@ class PlayPls extends BasePlay implements PlayInterface {
    	  return false;
    }
 
+   if($ballNum == 2){
+   	  $this->ticketNum = 2;
+   	  return true;
+   }
+
    //计算注数
-   $this->ticketNum = $this->Combination($ballNum,2);
+   $this->ticketNum = $this->Combination($ballNum,2) * 2;
 
    return true;
  }
@@ -151,6 +157,12 @@ class PlayPls extends BasePlay implements PlayInterface {
    if($ballNum == 0){
    	  return false;
    }
+
+   if($ballNum == 3){
+   	  $this->ticketNum = 1;
+   	  return true;
+   }
+
    //计算注数
    $this->ticketNum = $this->Combination($ballNum,3);
    
@@ -228,7 +240,7 @@ protected function  z6z3Sum(): bool {
   //组3和值
   $temp = [
     'playtype'=>1,
-    'lottype'=>7,
+    'lottype'=>6,
     'lotnum'=>implode(',',$zuSanArr),
     'money'=>$this->ticket['multiple'] * $zuSanZhu*2,
     'multiple'=>$this->ticket['multiple'],
@@ -238,11 +250,11 @@ protected function  z6z3Sum(): bool {
   array_push($this->ticketArr,$temp);
 
   //组6和值
-  $temp['lottype'] = 8;
+  $temp['lottype'] = 7;
   $temp['lotnum'] = implode(',',$zuLiuArr);
   $temp['money'] = $this->ticket['multiple'] * $zuLiuZhu*2;
   $temp['multiple']=$this->ticket['multiple'];
-  $temp['betnum']=$zuSanZhu;
+  $temp['betnum']=$zuLiuZhu;
   array_push($this->ticketArr,$temp);
   return true;
 }
@@ -273,7 +285,7 @@ protected function  z6z3Sum(): bool {
     }
 
     if(($ballDanNum + $ballTuoNum) < 5){
-      return false
+      return false;
     }
 
 
@@ -283,7 +295,7 @@ protected function  z6z3Sum(): bool {
          return false;
     }
     
-    $this->ticketNum = $this->Combination($ballsTuoArr,(3-$ballDanNum));
+    $this->ticketNum = $this->Combination($ballTuoNum,(3-$ballDanNum));
 
     unset($redBallAll);
     unset($ballsDanArr);
@@ -336,7 +348,7 @@ protected function  z6z3Sum(): bool {
     unset($rdan);
     unset($rtuo);
 
-    $this->ticketNum = $ballTuoNum * 2;
+    $this->ticketNum = $ballTuoNum;
 
     return true;
  }

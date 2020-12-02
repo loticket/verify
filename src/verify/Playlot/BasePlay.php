@@ -128,23 +128,29 @@ abstract class BasePlay
     public function getSpliteTicket(): array {
        $nowMultiple = intval($this->ticket['multiple']);
 
-       if ($nowMultiple < $this->maxmultiple[0]) {
-          return $this->ticket;
+       if ($nowMultiple < $this->maxmultiple[0] && count($this->ticketArr) == 0) {
+          return [$this->ticket];
+       }else if($nowMultiple < $this->maxmultiple[0] && count($this->ticketArr) != 0){
+           return $this->ticketArr;
        }
 
+       $ticket = count($this->ticketArr) == 0 ? [$this->ticket] : $this->ticketArr;
        $times = ceil($nowMultiple / $this->maxmultiple[0]);
        $newTicket = [];
-       $temp = $this->ticket;
-       for($i = 1;$i<=$times;$i++){
-          if($i*$this->maxmultiple[0] > $nowMultiple){
-            $temp['multiple'] =  $nowMultiple - ($i-1)*$this->maxmultiple[0];
-          }else{
-            $temp['multiple'] = $this->maxmultiple;
+
+      foreach ($ticket as $key => $val) {
+         $temp = $val;
+         for($i = 1;$i<=$times;$i++){
+            if($i*$this->maxmultiple[0] > $nowMultiple){
+              $temp['multiple'] =  $nowMultiple - ($i-1)*$this->maxmultiple[0];
+            }else{
+              $temp['multiple'] = $this->maxmultiple;
+            }
+
+            array_push($newTicket,$temp);
           }
 
-          array_push($newTicket,$temp);
-
-       }
+        }
        return $newTicket;
     } 
 

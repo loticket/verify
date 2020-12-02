@@ -5,10 +5,6 @@ use Loticket\Verify\Exception\PlayException;
 //七星彩
 class PlayQxc extends BasePlay implements PlayInterface {
 
-    protected $redBallBet = [];
-    
-    protected $blueBallBet = [];
-
     protected $ticketNum = 0;
     
     
@@ -71,7 +67,7 @@ class PlayQxc extends BasePlay implements PlayInterface {
         $ballArr = explode(';', $ball);
         $betZhu = 1;
         foreach ($ballArr as $key => $value) {
-         $flagArr = $this->checkBalls($value,$this->redBall,$this->normal['red']);
+         $flagArr = $this->checkBalls($value,$this->normal['red'],$this->redBall);
          $betZhu *= count($flagArr);
          if(count($flagArr) == 0){
            break;
@@ -89,7 +85,7 @@ class PlayQxc extends BasePlay implements PlayInterface {
      **/
      
     protected function checkAfter(string $ball): int {
-      $flagArr = $this->checkBalls($ball,$this->blueBall,$this->normal['blue']);
+      $flagArr = $this->checkBalls($ball,$this->normal['blue'],$this->blueBall);
       return count($flagArr);
     } 
 

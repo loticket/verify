@@ -102,10 +102,6 @@ class PlayQlc extends BasePlay implements PlayInterface {
          return false;
       }
 
-      if(strpos($this->ticket['lotnum'], "-") === false){
-         return false;
-      }
-
       //检查红球
       $this->redBallBet = $this->checkBalls($this->ticket['lotnum'],$this->normal['red'],$this->redBall);
 

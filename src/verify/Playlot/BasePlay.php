@@ -161,6 +161,10 @@ abstract class BasePlay
       	 return false;
       }
 
+      if($this->ticket['lottype'] != 1 && $this->ticket['betnum'] == 1){
+         return false;
+      }
+
       return true;
     }
 
@@ -186,6 +190,7 @@ abstract class BasePlay
     */
     public function checkBalls(string $ballArr,array $ballRange,array $ballAll): array {
         $ballArrs = explode(',', $ballArr);
+
         if(!$this->ballIsInset($ballArrs,$ballAll)) {
           return [];
         }
@@ -193,8 +198,14 @@ abstract class BasePlay
         if ($ballNum < $ballRange[0] || $ballNum > $ballRange[1]) {
            return [];
         }
-         
-        return sort($ballArrs);
+
+        if ($ballNum == 1) {
+            return $ballArrs;
+        }
+
+        sort($ballArrs);
+
+        return $ballArrs;
     }
 
 

@@ -63,6 +63,16 @@ return [
      'maxmultiple' => [99],
   ],
 
+  'plw'=>[
+     'redBall'=>['0','1', '2','3', '4', '5', '6', '7', '8', '9'], //前驱号码定义
+     'lottype'  => [1,2], //1 单式  2 复式
+     'playtype' => [1], //1 普通
+     'normal' => ['red'=>[1, 10]],
+     'dantuo' => [],
+     'ballrange' => [1,1],
+     'maxmultiple' => [99],
+  ],
+
 ];
 
 

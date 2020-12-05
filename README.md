@@ -111,6 +111,8 @@
 
 > 调用代码实例
 
+安装：composer require loticker/verify  
+
 ```
 use Loticket\LotteryApp;
 use Loticket\Verify\Exception\PlayException;

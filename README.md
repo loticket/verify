@@ -111,7 +111,8 @@
 
 > 调用代码实例
 
-安装：composer require loticker/verify  
+安装：composer require loticker/verify 
+要求：php版本 >= 7.4
 
 ```
 use Loticket\LotteryApp;

@@ -7,11 +7,12 @@ use Loticket\Verify\Exception\PlayException;
 class PlaySsq extends BasePlay implements PlayInterface {
 
 
-    protected array $redBallBet = [];
+    protected $redBallBet = [];
 
-    protected array $blueBallBet = [];
 
-    protected int $ticketNum = 0;
+    protected $blueBallBet = [];
+
+    protected $ticketNum = 0;
     
     
     /**

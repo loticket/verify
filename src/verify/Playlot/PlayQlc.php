@@ -5,9 +5,9 @@ use Loticket\Verify\Exception\PlayException;
 //七乐彩
 class PlayQlc extends BasePlay implements PlayInterface {
 
-    protected array $redBallBet = [];
+    protected $redBallBet = [];
 
-    protected int $ticketNum = 0;
+    protected $ticketNum = 0;
     
     
     /**

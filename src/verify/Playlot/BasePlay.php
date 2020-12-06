@@ -114,6 +114,11 @@ abstract class BasePlay
            return false;
        }
 
+       if (($this->ticket['money'] / $this->ticket['multiple']) > 20000) {
+           throw new PlayException("单票金额不能超过2万",1001);
+           return false;
+       }
+
 
 
 
@@ -135,24 +140,77 @@ abstract class BasePlay
        }
 
        $ticket = count($this->ticketArr) == 0 ? [$this->ticket] : $this->ticketArr;
-       $times = ceil($nowMultiple / $this->maxmultiple[0]);
+       $times = $this->spliteMultiple($this->ticket['multiple'],$this->ticket['money']);
        $newTicket = [];
 
       foreach ($ticket as $key => $val) {
          $temp = $val;
-         for($i = 1;$i<=$times;$i++){
-            if($i*$this->maxmultiple[0] > $nowMultiple){
-              $temp['multiple'] =  $nowMultiple - ($i-1)*$this->maxmultiple[0];
-            }else{
-              $temp['multiple'] = $this->maxmultiple;
-            }
-
+         for($i = 0;$i<count($times);$i++){
+            $temp['multiple'] = $times[$i];
+            $temp['money'] = $times[$i] * intval($val['money']/$val['multiple']);
             array_push($newTicket,$temp);
           }
 
         }
        return $newTicket;
     } 
+
+   /*按照最大钱数或者倍数拆倍数
+    *parame int ticketMultiple 倍数
+    *parame int ticketMoney    总金额
+    *return array  
+    */
+
+   public function spliteMultiple(int $ticketMultiple,int $ticketMoney): array {
+       $maxTicketmultiple = 99;
+       $maxMoney = 20000;
+
+       if ($ticketMultiple < $maxTicketmultiple && $ticketMoney < $maxMoney ) {
+          return [1];
+       }
+
+
+       //如果这张票超过两万 就按照倍数拆票
+       //按照倍数钞票
+       $singleMoney  = intval($ticketMoney / $ticketMultiple); //单注票的价格
+
+       if($singleMoney > ($maxMoney/2)) {
+          return array_fill(0, $ticketMultiple, 1);
+       }
+
+
+
+       //根据钱数求出最大倍数
+       $maxMultiple  = intval($maxMoney / $singleMoney);
+
+
+       $singleMultiple = $maxMultiple;
+
+       $spliteArray = [];
+
+       if($maxMultiple > $maxTicketmultiple) {
+           $singleMultiple = $maxTicketmultiple;
+       }
+
+       while ($ticketMultiple > 0) {
+           $tempMul = 0;
+          if($ticketMultiple > $singleMultiple) {
+            $tempMul = $singleMultiple;
+          } else {
+            $tempMul = $ticketMultiple;
+          }
+           
+          array_push($spliteArray, $tempMul);
+          $ticketMultiple -= $singleMultiple;
+
+       }
+
+      return $spliteArray;
+
+   }
+
+
+
 
     /*检查子玩法
     *parame int $lottype 子玩法

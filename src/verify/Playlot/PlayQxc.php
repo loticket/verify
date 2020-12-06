@@ -5,7 +5,7 @@ use Loticket\Verify\Exception\PlayException;
 //七星彩
 class PlayQxc extends BasePlay implements PlayInterface {
 
-    protected int $ticketNum = 0;
+    protected $ticketNum = 0;
     
     
     /**
